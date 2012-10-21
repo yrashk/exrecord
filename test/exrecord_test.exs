@@ -74,6 +74,10 @@ defmodule ExRecordTest do
     :code.purge MyRecord
   end
 
+  test "converting an up-to-date record" do
+    assert TestRecord.__convert__(TestRecord.new) == TestRecord.new
+  end
+
   test "record with default change implementation" do
     assert TestRecord.__convert__(TestRecord.new(__version__: 2)) == TestRecord.new
   end

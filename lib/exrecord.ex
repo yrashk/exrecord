@@ -37,6 +37,7 @@ defmodule ExRecord do
       end
 
       def unquote(convert)(src) do 
+        original = src
         {version, fields} = elem(src, 1)
         [__MODULE__|src] = tuple_to_list(src)
         [_version|src] = Enum.zip(fields, src)
@@ -44,7 +45,7 @@ defmodule ExRecord do
                __record__(:fields)[unquote(version_field)] do
           unquote(convert)(version, src)
         else
-          src
+          original
         end
       end
       def unquote(convert)(_version, src) do
