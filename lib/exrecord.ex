@@ -14,6 +14,7 @@ end
 defmodule ExRecord do
   defmacro __using__(opts) do
     version_field = opts[:version] || :__version__
+    convert = opts[:convert] || :__convert__
     quote do
       unless (Module.defines?(__MODULE__, {unquote(version_field), 1}) and
               Module.defines?(__MODULE__, {unquote(version_field), 2})) do
@@ -35,21 +36,21 @@ defmodule ExRecord do
                                              Keyword.keys(__record__(:fields))}])
       end
 
-      def __convert__(src) do 
+      def unquote(convert)(src) do 
         {version, fields} = elem(src, 1)
         [__MODULE__|src] = tuple_to_list(src)
         [_version|src] = Enum.zip(fields, src)
         unless version == 
                __record__(:fields)[unquote(version_field)] do
-          __convert__(version, src)
+          unquote(convert)(version, src)
         else
           src
         end
       end
-      def __convert__(_version, src) do
+      def unquote(convert)(_version, src) do
         new(Keyword.delete(src, unquote(version_field)))      
       end
-      defoverridable __convert__: 2
+      defoverridable [{unquote(convert), 2}]
     end
   end
 end

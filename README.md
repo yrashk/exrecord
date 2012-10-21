@@ -39,6 +39,12 @@ defrecord TestCustomChangeRecord, __version__: 2, a: 1 do
 end
 ```
 
+You can also rename the `__convert__` function:
+
+```elixir
+use ExRecord, convet: __my_convert__
+```
+
 ## Notes
 
 It is important to understand that each ExRecordified record will carry its version & field information in the very first field:

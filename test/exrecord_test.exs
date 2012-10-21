@@ -16,6 +16,15 @@ defrecord TestCustomChangeRecord, __version__: 1, a: 1 do
   end
 end
 
+defrecord TestCustomChangeRecord1, __version__: 1, a: 1 do
+  use ExRecord, convert: :__my_convert__
+
+  def __my_convert__(version, src) do
+    super(version, src).a(2)
+  end
+end
+
+
 defmodule ExRecordTest do
   use ExUnit.Case
 
@@ -75,6 +84,10 @@ defmodule ExRecordTest do
 
   test "record with custom change implementation" do
     assert TestCustomChangeRecord.__convert__(TestCustomChangeRecord.new(__version__: 2)) == TestCustomChangeRecord.new(a: 2)
+  end
+
+  test "record with customly named change implementation" do
+    assert TestCustomChangeRecord1.__my_convert__(TestCustomChangeRecord1.new(__version__: 2)) == TestCustomChangeRecord1.new(a: 2)
   end
 
 end
