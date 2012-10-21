@@ -42,7 +42,7 @@ end
 You can also rename the `__convert__` function:
 
 ```elixir
-use ExRecord, convet: __my_convert__
+use ExRecord, convert: :__my_convert__
 ```
 
 ## Example
