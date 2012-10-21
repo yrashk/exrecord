@@ -58,7 +58,7 @@ iex(3)> inspect v(-1), raw: true
 "{Foo,{1,[:__version__,:bar]},1}"
 ```
 
-Now, let's remember this binary and reuse it in a new IEx session:
+Now, let's copy the raw record representation and reuse it in a new IEx session:
 
 ```elixir
 iex(1)> defrecord Foo, __version__: 2, bar: nil, foo: nil do
