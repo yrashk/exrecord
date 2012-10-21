@@ -45,6 +45,35 @@ You can also rename the `__convert__` function:
 use ExRecord, convet: __my_convert__
 ```
 
+## Example
+
+```elixir
+iex(1)> defrecord Foo, __version__: 1, bar: nil do
+...(1)>   use ExRecord
+...(1)> end
+{:module,Foo,<<70,79,82,49,0,0,9,200,66,69,65,77,65,116,111,109,0,0,1,121,0,0,0,39,10,69,108,105,120,105,114,45,70,111,111,8,95,95,105,110,102,111,95,95,4,100,111,99,115,9,...>>,[true]}
+iex(2)> Foo.new(bar: 1)
+Foo[__version__: {1,[:__version__,:bar]}, bar: 1]
+iex(3)> term_to_binary(v(-1))
+<<131,104,3,100,0,10,69,108,105,120,105,114,45,70,111,111,104,2,97,1,108,0,0,0,2,100,0,11,95,95,118,101,114,115,105,111,110,95,95,100,0,3,98,97,114,106,97,1>>
+```
+
+Now, let's remember this binary and reuse it in a new IEx session:
+
+```elixir
+iex(1)> defrecord Foo, __version__: 2, bar: nil, foo: nil do
+...(1)>   use ExRecord
+...(1)> end
+{:module,Foo,<<70,79,82,49,0,0,10,192,66,69,65,77,65,116,111,109,0,0,1,136,0,0,0,41,10,69,108,105,120,105,114,45,70,111,111,8,95,95,105,110,102,111,95,95,4,100,111,99,115,9,...>>,[true]}
+iex(2)> record = binary_to_term(<<131,104,3,100,0,10,69,108,105,120,105,114,45,70,111,111,104,2,97,1,108,0,0,0,2,100,0,11,95,95,118,101,114,115,105,111,110,95,95,100,0,3,98,97,114,106,97,1>>)
+{Foo,{1,[:__version__,:bar]},1}
+iex(3)> Foo.__convert__(record)
+Foo[__version__: {2,[:__version__,:bar,:foo]}, bar: 1, foo: nil]
+```
+
+As you can see, the old record got automatically converted to a new record that contains
+more fields.
+
 ## Notes
 
 It is important to understand that each ExRecordified record will carry its version & field information in the very first field:
