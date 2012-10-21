@@ -86,3 +86,5 @@ iex(1)> defrecord Foo, __version__: 1, bar: 2 do
 iex(2)> Foo.new
 Foo[__version__: {1,[:__version__,:bar]}, bar: 2]
 ```
+
+Also, you don't need to have a runtime dependency on `exrecord` application as all work is done during compile time. All of the conversion code gets compiled into your record modules.
