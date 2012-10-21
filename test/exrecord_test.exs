@@ -90,4 +90,25 @@ defmodule ExRecordTest do
     assert TestCustomChangeRecord1.__my_convert__(TestCustomChangeRecord1.new(__version__: 2)) == TestCustomChangeRecord1.new(a: 2)
   end
 
+  test "convert algorithm doesn't use old record module" do
+    quoted = quote do
+      defrecord Record1, __version__: 1, a: 1 do
+        use ExRecord
+      end
+    end
+    Code.eval_quoted quoted
+    rec = Record1.new
+    :code.delete Record1
+    :code.purge Record1
+    quoted = quote do    
+      defrecord Record1, __version__: 2, b: 1 do
+        use ExRecord
+      end
+    end
+    Code.eval_quoted quoted    
+    assert Record1.__convert__(rec) == Record1.new
+    :code.delete Record1
+    :code.purge Record1    
+  end
+
 end
